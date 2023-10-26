@@ -2,6 +2,8 @@ import re
 import urllib.request
 from xml.dom import minidom
 import requests
+import csv
+import json
 
 
 def remove_tags(string: str) -> str:
@@ -57,3 +59,20 @@ def convert_currency(currency_code, amount):
 #                 # nominal = rate.getElementsByTagName("Nominal")[0]
 #                 currencies[charcode.firstChild.data] = float('.'.join(value.firstChild.data.split(',')))
     return currencies[currency_code] * amount
+
+
+def save_to_csv(file_name, object_list):
+    with open(file_name, mode='w', newline='', encoding='utf-8') as file:
+        writer = csv.writer(file)
+        # получаем список всех атрибутов из первого объекта
+        attributes = vars(object_list[0]).keys()
+        writer.writerow(attributes)
+        for obj in object_list:
+            # получаем значения атрибутов в том же порядке, что и заголовки
+            values = [getattr(obj, attr) for attr in attributes]
+            writer.writerow(values)
+
+
+def save_to_json(file_name, object_list):
+    with open(file_name, mode='w', encoding='utf-8') as file:
+        json.dump([vars(obj) for obj in object_list], file, ensure_ascii=False)

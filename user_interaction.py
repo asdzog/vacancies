@@ -1,6 +1,7 @@
 from api.hh_api import HeadHunterAPI
 from api.sj_api import SuperJobAPI
 from vacancy import Vacancy
+from utils import save_to_csv, save_to_json
 
 
 def user_interaction():
@@ -25,6 +26,9 @@ def user_interaction():
 
         for vacancy in vacancy_objects:
             print(vacancy)
+
+        save_to_json('data\\vacancies.json', vacancy_objects)
+        save_to_csv('data\\vacancies.csv', vacancy_objects)
 
     else:
         print('По выбранным ключевым словам вакансий не нашлось')
