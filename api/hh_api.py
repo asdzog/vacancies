@@ -33,7 +33,9 @@ class API(ABC):
 
 
 class HeadHunterAPI(API):
-
+    """
+    Класс для работы с API hh.ru
+    """
     HH_API_URL = 'https://api.hh.ru/vacancies'
     HH_API_URL_CITIES = 'https://api.hh.ru/areas'
 
