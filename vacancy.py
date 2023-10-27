@@ -23,12 +23,8 @@ class Vacancy:
             Ссылка на вакансию: {self.url}
             Средняя зарплата: {self.avg_salary if self.avg_salary else self.salary}
             Работодатель: {self.employer}
-            Сылка на работодателя: {self.employer}
+            Сылка на работодателя: {self.employer_url}
             Требуемый опыт: {self.experience}
             Требования: {self.requirements}
             Занятость: {self.work_mode}'''
         )
-
-    def avg_salary(self):
-        pass
-
