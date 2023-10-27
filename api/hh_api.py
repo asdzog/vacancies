@@ -82,10 +82,10 @@ class HeadHunterAPI(API):
                 salary_to = 0
                 salary = 'Зарплата не указана'
             else:
-                amount_from = int(vc['salary']['to']) if vc['salary']['to'] else 0
-                salary_from = convert_currency(vc['salary']['currency'], amount_from)
-                amount_to = int(vc['salary']['from']) if vc['salary']['from'] else 0
+                amount_to = int(vc['salary']['to']) if vc['salary']['to'] else 0
                 salary_to = convert_currency(vc['salary']['currency'], amount_to)
+                amount_from = int(vc['salary']['from']) if vc['salary']['from'] else 0
+                salary_from = convert_currency(vc['salary']['currency'], amount_from)
                 if salary_from:
                     if salary_to:
                         salary = f'Зарплата от {salary_from} до {salary_to}'
