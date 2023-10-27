@@ -16,7 +16,7 @@ class API(ABC):
         pass
 
     @abstractmethod
-    def change_period(self):
+    def change_period(self, days):
         pass
 
     @abstractmethod
@@ -24,7 +24,7 @@ class API(ABC):
         pass
 
     @abstractmethod
-    def add_city(self):
+    def add_city(self, city):
         pass
 
     @abstractmethod
@@ -35,31 +35,38 @@ class API(ABC):
 class HeadHunterAPI(API):
 
     HH_API_URL = 'https://api.hh.ru/vacancies'
-    HH_API_URL_AREAS = 'https://api.hh.ru/areas'
+    HH_API_URL_CITIES = 'https://api.hh.ru/areas'
 
     params_default = {
-        'text': [],
-        'area': 1,
-        'per_page': 100,
-        'date': 14
+        'text': [],  # ключевое слово или их список
+        'area': 1,  # поиск осуществляется по вакансиям города 1 - Москва
+        'per_page': 100,  # число вакансий на странице
+        'date': 7  # период времени для поиска
     }
 
     def __init__(self):
         self.params = copy.deepcopy(self.params_default)
-        pass
 
-    def change_period(self):
-        pass
+    def change_period(self, days):
+        self.params['period'] = days
 
     def add_keyword(self, keywords):
         self.params['text'].append(keywords)
 
-    def add_city(self):
-        pass
+    def add_city(self, city):
+        self.params['area'] = self.load_all_cities()[city]
 
     def load_all_cities(self):
-        cities_params_list = requests.get(self.HH_API_URL_AREAS).json()
-        return cities_params_list
+        cities = {}
+        cities_dict = requests.get(self.HH_API_URL_CITIES).json()
+        for k in cities_dict:
+            for i in range(len(k['areas'])):
+                if len(k['areas'][i]['areas']) != 0:
+                    for j in range(len(k['areas'][i]['areas'])):
+                        cities[k['areas'][i]['areas'][j]['name'].title()] = k['areas'][i]['areas'][j]['id']
+                else:
+                    cities[k['areas'][i]['name'].title()] = k['areas'][i]['id']
+        return cities
 
     def get_vacancies(self):
         vc_list = []

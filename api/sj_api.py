@@ -17,7 +17,7 @@ class API(ABC):
         pass
 
     @abstractmethod
-    def change_period(self):
+    def change_period(self, days):
         pass
 
     @abstractmethod
@@ -25,7 +25,7 @@ class API(ABC):
         pass
 
     @abstractmethod
-    def add_city(self):
+    def add_city(self, city):
         pass
 
     @abstractmethod
@@ -38,23 +38,42 @@ class SuperJobAPI(API):
     Класс для работы с API superjob.ru
     """
     SJ_API_URL = 'https://api.superjob.ru/2.0/vacancies'
-    SJ_API_URL_AREAS = 'https://api.superjob.ru/2.0/towns'
+    SJ_API_URL_CITIES = 'https://api.superjob.ru/2.0/towns'
     # SJ_TOKEN = os.getenv('SJ_API_KEY')
     SJ_TOKEN = 'v3.r.137503922.05a7d0fbd6b9ca56087f1e69b1bd87d60a1a83c4.78f3fff96e0950f0e141fc24c16505625fce56a8'
 
     params_default = {
-        'keyword': [],  # Текст фильтра. В имени должна быть профессия
-        'town': 1,  # Поиск осуществляется по вакансиям города 1 - Москва
+        'keyword': [],  # ключевое слово или их список
+        'town': 1,  # поиск осуществляется по вакансиям города 1 - Москва
+        'count': 100,  # число вакансий на странице
+        'period': 7  # период времени для поиска
     }
 
     def __init__(self):
         self.params = copy.deepcopy(self.params_default)
-        pass
+        self.headers = {'X-Api-App-Id': self.SJ_TOKEN}
+
+    def change_period(self, days):
+        self.params['period'] = days
+
+    def add_keyword(self, keywords):
+        self.params['keyword'].append(keywords)
+
+    def add_city(self, city):
+        self.params['town'] = self.load_all_cities()[city]
+
+    def load_all_cities(self):
+        cities = {}
+        response_data = requests.get(self.SJ_API_URL_CITIES,
+                                     headers=self.headers,
+                                     params={'id_country': 1, 'all': 1}).json()
+        for city in response_data['objects']:
+            cities[city["title"].title()] = city["id"]
+        return cities
 
     def get_vacancies(self):
-        headers = {'X-Api-App-Id': self.SJ_TOKEN}
-        sj_ru_data = requests.get(self.SJ_API_URL, headers=headers, params=self.params)
 
+        sj_ru_data = requests.get(self.SJ_API_URL, headers=self.headers, params=self.params)
         code = sj_ru_data.status_code
         if code != 200:
             raise ParsingError(f'Ошибка получения вакансий! Статус-код: {code}')
@@ -91,16 +110,3 @@ class SuperJobAPI(API):
                 'requirements': reqs_without_text[:170] + '...'
             })
         return vc_list
-
-    def change_period(self):
-        pass
-
-    def add_keyword(self, keywords):
-        self.params['keyword'].append(keywords)
-
-    def add_city(self):
-        pass
-
-    def load_all_cities(self):
-        cities_params_list = requests.get(self.SJ_API_URL_AREAS).json()
-        return cities_params_list
