@@ -57,7 +57,7 @@ class SuperJobAPI(API):
         self.params['period'] = days
 
     def add_keyword(self, keywords):
-        self.params['keyword'].append(keywords)
+        self.params['keyword'].extend(keywords)
 
     def add_city(self, city):
         self.params['town'] = self.load_all_cities()[city]

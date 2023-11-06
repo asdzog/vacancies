@@ -53,7 +53,7 @@ class HeadHunterAPI(API):
         self.params['period'] = days
 
     def add_keyword(self, keywords):
-        self.params['text'].append(keywords)
+        self.params['text'] = keywords
 
     def add_city(self, city):
         self.params['area'] = self.load_all_cities()[city]

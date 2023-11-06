@@ -41,3 +41,16 @@ def save_to_csv(file_name, object_list):
 def save_to_json(file_name, object_list):
     with open(file_name, mode='w', encoding='utf-8') as file:
         json.dump([vars(obj) for obj in object_list], file, ensure_ascii=False)
+
+
+def hh_keywords_to_list(string):
+    string = string.strip().lower()
+    if ',' in string or ' ' in string:
+        while ' ' in string:
+            string = string.replace(' ', '')
+        keywords = string.split(',')
+    else:
+        keywords = [string]
+    return keywords
+
+

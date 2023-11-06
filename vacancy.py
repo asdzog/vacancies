@@ -21,7 +21,7 @@ class Vacancy:
             Город: {self.city}
             Название вакансии: {self.name}
             Ссылка на вакансию: {self.url}
-            Средняя зарплата: {self.avg_salary if self.avg_salary else self.salary}
+            Макс. зарплата: {self.salary_to if self.salary_to else self.salary}
             Работодатель: {self.employer}
             Сылка на работодателя: {self.employer_url}
             Требуемый опыт: {self.experience}
