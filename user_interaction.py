@@ -1,7 +1,7 @@
 from api.hh_api import HeadHunterAPI
 from api.sj_api import SuperJobAPI
 from vacancy import Vacancy
-from utils import save_to_json, hh_keywords_to_list
+from utils import hh_keywords_to_list, save_result_and_print
 
 
 def stop_or_return():
@@ -12,13 +12,6 @@ def stop_or_return():
         exit()
     else:
         user_interaction()
-
-
-def save_result_and_print(vacancy_objects_list):
-    for vacancy in vacancy_objects_list:
-        print(vacancy)
-    save_to_json('data\\vacancies.csv', vacancy_objects_list)
-    print(f'\nВакансии в количестве {len(vacancy_objects_list)} шт успешно загружены в файл vacancies.json')
 
 
 def user_interaction():

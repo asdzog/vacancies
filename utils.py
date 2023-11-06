@@ -14,6 +14,12 @@ def remove_tags(string: str) -> str:
 
 
 def convert_currency(currency_code, amount):
+    """
+    Конвертирует сумму в рубли
+    :param currency_code: код валюты
+    :param amount: сумма для конвертации
+    :return: сумма в рублях после конвертации валюты
+    """
     currency_code = currency_code.upper()
     currencies = {'AUD': 60.5738, 'AZN': 56.4149, 'GBP': 116.4578, 'AMD': 23.8891, 'BYN': 29.3918, 'BGN': 51.7707,
                       'BRL': 18.9772, 'HUF': 26.4617, 'VND': 39.7782, 'HKD': 12.2814, 'GEL': 35.5732, 'DKK': 13.5688,
@@ -27,6 +33,12 @@ def convert_currency(currency_code, amount):
 
 
 def save_to_csv(file_name, object_list):
+    """
+    Сохраняет информацию о списке объектов в файл с расширением csv
+    :param file_name: имя файла для сохранения
+    :param object_list: список объектов
+    :return: None
+    """
     with open(file_name, mode='w', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
         # получаем список всех атрибутов из первого объекта
@@ -39,11 +51,22 @@ def save_to_csv(file_name, object_list):
 
 
 def save_to_json(file_name, object_list):
+    """
+    Сохраняет информацию о списке объектов в файл с расширением json
+    :param file_name: имя файла для сохранения
+    :param object_list: список объектов
+    :return: None
+    """
     with open(file_name, mode='w', encoding='utf-8') as file:
         json.dump([vars(obj) for obj in object_list], file, ensure_ascii=False)
 
 
 def hh_keywords_to_list(string):
+    """
+    Преобразует строку с ключевыми словами в список
+    :param string: входная строка, содержащая ключевые слова через запятую (или одно слово)
+    :return: список ключевых слов
+    """
     string = string.strip().lower()
     if ',' in string or ' ' in string:
         while ' ' in string:
@@ -54,3 +77,14 @@ def hh_keywords_to_list(string):
     return keywords
 
 
+def save_result_and_print(vacancy_objects_list):
+    """
+    Сохраняет результат в файл и выводит информацию об этом
+    :param vacancy_objects_list: список объектов класса Vacancy для сохранения
+    :return: None
+    """
+    for vacancy in vacancy_objects_list:
+        print(vacancy)
+    save_to_json('data\\vacancies.json', vacancy_objects_list)
+    save_to_csv('data\\vacancies.csv', vacancy_objects_list)
+    print(f'\nВакансии в количестве {len(vacancy_objects_list)} шт успешно загружены в файл vacancies.json')
