@@ -10,8 +10,8 @@ class Vacancy:
         self.experience = vacancy_data['experience']
         self.url = vacancy_data['url']
         self.salary = vacancy_data['salary']
-        self.salary_from = vacancy_data['salary_from']
-        self.salary_to = vacancy_data['salary_to']
+        self.salary_from = min(vacancy_data['salary_from'], vacancy_data['salary_to'])
+        self.salary_to = max(vacancy_data['salary_to'], vacancy_data['salary_from'])
         self.requirements = vacancy_data['requirements']
         self.avg_salary = round((self.salary_from + self.salary_to) // 2)
 

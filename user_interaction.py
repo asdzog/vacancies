@@ -1,7 +1,7 @@
 from api.hh_api import HeadHunterAPI
 from api.sj_api import SuperJobAPI
 from vacancy import Vacancy
-from utils import save_to_csv, save_to_json, hh_keywords_to_list
+from utils import save_to_json, hh_keywords_to_list
 
 
 def stop_or_return():
@@ -17,7 +17,7 @@ def stop_or_return():
 def save_result_and_print(vacancy_objects_list):
     for vacancy in vacancy_objects_list:
         print(vacancy)
-    save_to_csv('data\\vacancies.csv', vacancy_objects_list)
+    save_to_json('data\\vacancies.csv', vacancy_objects_list)
     print(f'\nВакансии в количестве {len(vacancy_objects_list)} шт успешно загружены в файл vacancies.json')
 
 
@@ -90,9 +90,10 @@ def user_interaction():
                 vacancy_objects.sort(key=lambda vacancy_object: vacancy_object.salary_to)
                 save_result_and_print(vacancy_objects)
             case '3':
-                print('Список вакансий с сортировкой по возрастанию зарплаты: \n')
+                print('Список вакансий с сортировкой по убыванию зарплаты: \n')
                 vacancy_objects.sort(key=lambda vacancy_object: vacancy_object.salary_to, reverse=True)
                 save_result_and_print(vacancy_objects)
+
             case '4':
                 vacancies_amount = ''
                 while not vacancies_amount.isdigit():
